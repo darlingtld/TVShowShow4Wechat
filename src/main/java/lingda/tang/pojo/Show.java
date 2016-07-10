@@ -18,6 +18,16 @@ public class Show {
     private List<BTLink> btLinkList;
     private String description= Strings.NO_DESCRIPTION;
 
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
+    private Source source;
+
     public Show(String showName, int season, int episode) {
         this.name = showName;
         this.season = season;

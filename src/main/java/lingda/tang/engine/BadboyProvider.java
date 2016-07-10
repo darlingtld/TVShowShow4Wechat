@@ -7,13 +7,10 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import lingda.tang.pojo.BTLink;
 import lingda.tang.pojo.Show;
-import lingda.tang.pojo.Source;
 import lingda.tang.util.Utils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,13 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by darlingtld on 2015/2/6.
- */
 @Component
-public class DygodProvider extends SourceProvider {
-    private static final Logger logger = LoggerFactory.getLogger(DygodProvider.class);
-    private static final String DYGOD_DOMAIN = "http://www.dy2018.com";
+public class BadboyProvider extends SourceProvider {
+    private static final String DYGOD_DOMAIN = "http://1024.05ia.org/pw/";
 
     @Override
     public List<Show> searchShows(String keyword) {
@@ -44,10 +37,9 @@ public class DygodProvider extends SourceProvider {
             try {
                 show.setUrl(new URL(DYGOD_DOMAIN + aTagElement.attr("href")));
                 String date = element.getElementsByTag("font").last().text();
-                date = date.substring(0, date.indexOf("点击"));
+                date = date.substring(0, date.indexOf("���"));
                 show.setDescription(String.format("%s\t%s", date, element.getElementsByTag("td").last().text()));
                 show.setBtLinkList(processDownLoadLinks(show));
-                show.setSource(Source.DYGOD);
                 showList.add(show);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -84,7 +76,7 @@ public class DygodProvider extends SourceProvider {
             HtmlPage page2 = button.click();
             return page2.getUrl().toString();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            e.printStackTrace();
         } finally {
             webClient.closeAllWindows();
         }

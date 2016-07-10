@@ -2,10 +2,13 @@ package lingda.tang.engine;
 
 import lingda.tang.pojo.BTLink;
 import lingda.tang.pojo.Show;
+import lingda.tang.pojo.Source;
 import lingda.tang.util.Utils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -18,6 +21,7 @@ import java.util.List;
  */
 @Component
 public class BttiantangProvider extends SourceProvider {
+    private static final Logger logger = LoggerFactory.getLogger(BttiantangProvider.class);
     private final String DOMAIN = "http://www.bttiantang.com";
     private final String SEARCH_URL = "s.php?q=%s&sitesearch=www.bttiantang.com&domains=bttiantang.com&hl=zh-CN&ie=UTF-8&oe=UTF-8";
 
@@ -35,13 +39,14 @@ public class BttiantangProvider extends SourceProvider {
                     List<BTLink> btLinks = getBTLinks(showLink);
                     Show show = new Show(showName);
                     show.setBtLinkList(btLinks);
+                    show.setSource(Source.BTTIANTANG);
                     showList.add(show);
                 } catch (Exception e) {
                     continue;
                 }
             }
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return showList;
     }

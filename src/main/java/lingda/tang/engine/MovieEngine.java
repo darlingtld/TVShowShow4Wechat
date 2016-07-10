@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by darlingtld on 2015/2/8.
@@ -33,24 +34,13 @@ public class MovieEngine {
 
     public List<Show> searchShows(final String keyword) {
         final List<Show> showList = new ArrayList<>();
-        List<Future> futureList = new ArrayList<Future>();
+        List<Future> futureList = new ArrayList<>();
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors() + 1, ALIVE_TIME, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1, true));
-        for (final SourceProvider provider : providerList) {
-            futureList.add(threadPoolExecutor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    showList.addAll(provider.searchShows(keyword));
-                }
-            }));
-        }
+        futureList.addAll(providerList.stream().map(provider -> threadPoolExecutor.submit((Runnable) () -> showList.addAll(provider.searchShows(keyword)))).collect(Collectors.toList()));
         for (Future future : futureList) {
             try {
                 future.get(RESULT_WAIT_TIME, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 e.printStackTrace();
             }
         }

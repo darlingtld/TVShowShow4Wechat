@@ -11,6 +11,7 @@ import lingda.tang.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class EventService {
                 sendMail(name, showList, emailAddress);
             }
         }.start();
+        System.out.println(String.format("[%s] %s 搜索了 %s", LocalDateTime.now(), fromUserName, name));
         String respContent = String.format("您搜索的 %s 会在稍后将下载链接发送到邮箱\n%s", name, emailAddress);
         TextMessage textMessage = new TextMessage();
         textMessage.setToUserName(fromUserName);
@@ -43,7 +45,7 @@ public class EventService {
 
     private void sendMail(String name, List<Show> showList, String emailAddress) {
         String subject = String.format("%s 下载地址", name);
-        StringBuffer htmlContent = new StringBuffer();
+        StringBuilder htmlContent = new StringBuilder();
         if (showList.isEmpty()) {
             htmlContent.append(String.format("<font color='red' size='5'>%s</font>", Strings.NO_MOVIE_FOUND));
         } else {
@@ -57,8 +59,9 @@ public class EventService {
                 htmlContent.append("<br>");
             }
         }
-        System.out.println(subject);
-        System.out.println(htmlContent.toString());
+        System.out.println(String.format("[%s] %s 得到了 %s 搜索结果", LocalDateTime.now(), name, showList.size()));
+//        System.out.println(subject);
+//        System.out.println(htmlContent.toString());
         SimpleMailSender.send(emailAddress, subject, htmlContent.toString());
     }
 }

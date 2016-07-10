@@ -36,7 +36,7 @@ public class WechatService {
                 String eventType = requestMap.get("Event");
                 if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
                     String respContent = "您好，欢迎来到灵达电影爬爬看！\n回复影片名字和邮箱地址，下载链接马上到~\n" +
-                            "格式：侏罗纪>michael@qq.com";
+                            "格式：\n侏罗纪>john@163.com";
                     TextMessage textMessage = new TextMessage();
                     textMessage.setToUserName(fromUserName);
                     textMessage.setFromUserName(toUserName);
@@ -49,7 +49,7 @@ public class WechatService {
             } else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
                 String[] strings = content.split(">");
                 if (strings.length != 2) {
-                    String respContent = "请回复您想要看的影片名字和您的邮箱~~\n格式：侏罗纪>michael@qq.com";
+                    String respContent = "请回复您想要看的影片名字和您的邮箱~~\n格式：\n侏罗纪>john@163.com";
                     TextMessage textMessage = new TextMessage();
                     textMessage.setToUserName(fromUserName);
                     textMessage.setFromUserName(toUserName);
@@ -84,7 +84,7 @@ public class WechatService {
                 }
             }
 
-            String respContent = "请回复您想要看的影片名字和您的邮箱~~\n格式：侏罗纪>michael@qq.com";
+            String respContent = "请回复您想要看的影片名字和您的邮箱~~\n格式：\n侏罗纪>john@163.com";
             TextMessage textMessage = new TextMessage();
             textMessage.setToUserName(fromUserName);
             textMessage.setFromUserName(toUserName);
